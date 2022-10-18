@@ -27,7 +27,7 @@ class AbstractsDateTime(Model):
         abstract = True
 
     def delete(self: 'AbstractsDateTime'):
-        """Delete user"""
+        """Delete obj"""
         self.datetime_deleted: datetime = datetime.now()
         self.save(
             update_fields=['datetime']

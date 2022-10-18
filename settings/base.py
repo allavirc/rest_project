@@ -12,6 +12,7 @@ DJANGO_AND_THIRD_PARTY_APPS = [
 ]
 
 PROJECT_APS = [
+    'abstracts.apps.AbstractsConfig',
     'auths.apps.AuthsConfig',
 ]
 

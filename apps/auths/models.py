@@ -1,7 +1,7 @@
+# Django
 from django.db.models import (
     EmailField,
     CharField,
-    ImageField,
     QuerySet,
 )
 from django.contrib.auth.models import (
@@ -11,7 +11,10 @@ from django.contrib.auth.models import (
 from django.contrib.auth.base_user import BaseUserManager
 from django.core.exceptions import ValidationError
 
+# Rest
+from rest_framework.response import Response
 
+# Apps
 from abstracts.validators import APIValidator
 from abstracts.models import AbstractsDateTime
 
@@ -49,10 +52,19 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def get_undeleted_users(self) -> QuerySet['CustomUser']:
-        """Get undeleted users"""
-        users: QuerySet[CustomUser] = self.filter(deleted_at=None)
-        return users
+    def get_undeleted_user(self, email: str) -> QuerySet['CustomUser']:
+        """Get undeleted user"""
+        try:
+            users: QuerySet[CustomUser] = self.get(
+                email=email,
+                deleted_at=None
+            )
+            return users
+        except:
+            return Response(
+                data={'message': 'Такой пользователь не найден'},
+                status=404
+            )
 
 
 class CustomUser(
@@ -68,8 +80,7 @@ class CustomUser(
     login = CharField(
         'Номер телефона',
         unique=True,
-        max_length=11, 
-        null=True
+        max_length=11,
     )
     verificated_code = CharField('Код подтверждения', max_length=5, null=True)
     USERNAME_FIELD = 'email'

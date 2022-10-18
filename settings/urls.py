@@ -1,9 +1,14 @@
+#Django
 from django.conf import settings
 from django.urls import path, include
 from django.contrib import admin
 from django.conf.urls.static import static
 
+#Rest
 from rest_framework.routers import DefaultRouter
+
+#Apps
+from apps.auths.views import UserViewSet
 
 
 urlpatterns = [
@@ -20,6 +25,10 @@ urlpatterns = [
 #
 router: DefaultRouter = DefaultRouter(
     trailing_slash=False
+)
+
+router.register(
+    'registration', UserViewSet
 )
 
 urlpatterns += [

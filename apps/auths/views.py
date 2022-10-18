@@ -1,3 +1,4 @@
+# Django
 from django.db.models import QuerySet
 
 # Rest
@@ -23,15 +24,7 @@ class UserViewSet(
     queryset: QuerySet[CustomUser] = CustomUser.objects.all()
     serializer_class = UserSerializer
 
-    @action(
-        methods=['post'],
-        detail=False,
-        url_path='create-account',
-        permission_classes=(
-            AllowAny,
-        )
-    )
-    def create_account(self, request: Request):
+    def create(self, request: Request):
         login = request.data['login']
         email = request.data['email']
         password = 'qwerty'
@@ -39,6 +32,7 @@ class UserViewSet(
         CustomUser.objects.create_user(
             email, login, pin, password
         )
+        self.send_to_authentifacate(pin, email)
         return Response(status=201)
 
     @action(
@@ -49,16 +43,16 @@ class UserViewSet(
             AllowAny,
         )
     )
-    def set_password(self, request):
-        email = request.data['email']
-        password = request.data['password']
-        pin = request.data['pin']
+    def set_password(self, request: Request):
         try:
-            user: CustomUser = CustomUser.objects.get(
-                email=email
-            )
+            email = request.data['email']
+            password = request.data['password']
+            pin = request.data['pin']
         except:
-            return Response(data={'message': 'Такой пользователь не найден'}, status=404)
+            return Response(data={'message': 'Не хватает полей'}, status=401)
+        user: CustomUser = CustomUser.objects.get_undeleted_user(
+            email=email
+        )
         if not user.verificated_code:
             return Response(data={'message': 'Вы авторизованы'}, status=500)
         elif user.verificated_code != pin:
@@ -68,7 +62,7 @@ class UserViewSet(
         user.save()
         return Response(status=201)
 
-    def retrieve(self, request, pk):
+    def retrieve(self, request: Request, pk: str):
         try:
             serializer: UserSerializer = \
                 UserSerializer(

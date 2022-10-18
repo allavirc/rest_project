@@ -4,6 +4,7 @@ import random
 
 #Django
 from django.core.mail import send_mail
+from settings.base import EMAIL_HOST_USER
 
 #Rest
 from rest_framework.response import Response
@@ -33,8 +34,8 @@ class SendEmailMixin:
         try:
             send_mail(
                 'Check pin',
-                pin,
-                'marat.duman@gmail.com',
+                f"das00 {pin}",
+                EMAIL_HOST_USER,
                 [user_email],
                 fail_silently=False,
             )
