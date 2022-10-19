@@ -2,6 +2,7 @@ from . import get_env_variable
 from pathlib import Path
 import os
 import sys
+from web3 import Web3
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.append(BASE_DIR)
@@ -13,6 +14,14 @@ ADMIN_SITE_URL = get_env_variable("ADMIN_SITE_URL")
 SECRET_KEY = get_env_variable("SECRET_KEY")
 
 DEBUG = get_env_variable("DEBUG")
+
+
+binance_testnet_rpc_url = "https://data-seed-prebsc-1-s1.binance.org:8545/"
+web3 = Web3(Web3.HTTPProvider(binance_testnet_rpc_url))
+print(f"Is connected: {web3.isConnected()}")
+print(f"gas price: {web3.eth.gas_price} BNB")
+print(f"current block number: {web3.eth.block_number}")
+print(f"number of current chain is {web3.eth.chain_id}") 
 
 ALLOWED_HOSTS = []
 
