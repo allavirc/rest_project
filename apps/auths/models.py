@@ -40,14 +40,13 @@ class CustomUserManager(BaseUserManager):
                 '400',
             )
 
-    def create_superuser(self, email: str, login, pin, password: str) -> 'CustomUser':
+    def create_superuser(self, email: str, login, password: str) -> 'CustomUser':
         user: 'CustomUser' = self.model(
             email=self.normalize_email(email),
             login=login,
-            verificated_code=pin,
             password=password
         )
-        user.is_superuser = True
+        user.is_superuser: bool = True
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -84,7 +83,7 @@ class CustomUser(
     )
     verificated_code = CharField('Код подтверждения', max_length=5, null=True)
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['login']
     objects = CustomUserManager()
 
     class Meta:
