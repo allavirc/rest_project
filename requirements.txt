@@ -1,0 +1,20 @@
+# ------------------------------------------------
+# CPython
+#
+pip==22.2.2
+
+# ------------------------------------------------
+# Django
+#
+Django==4.1.1
+django-extensions==3.2.0
+
+# ------------------------------------------------
+# Third-party
+#
+djangorestframework==3.13.1
+djangorestframework-simplejwt==5.2.0
+art~=5.7
+names~=0.3.0
+sendsms~=0.2.0
+python-dotenv~=0.21.0
